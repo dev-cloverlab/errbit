@@ -54,6 +54,8 @@ gem 'httparty'
 # Flowdock
 gem 'flowdock'
 
+gem 'non-stupid-digest-assets'
+
 # Authentication
 # ---------------------------------------
 # GitHub OAuth
@@ -81,6 +83,17 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller', platform: 'ruby'
   gem 'meta_request'
+end
+
+group :deployment do
+  gem 'capistrano', '~> 3.2.1', platforms: :ruby
+  gem 'capistrano-rails', platforms: :ruby
+  gem 'capistrano-rbenv', platforms: :ruby
+  gem 'capistrano-bundler', platforms: :ruby
+  gem 'capistrano3-unicorn', platforms: :ruby # unicornを使っている場合のみ
+  # assetコンパイル用
+  # gem 'asset_sync'
+  gem 'capistrano-faster-assets'
 end
 
 group :test do
