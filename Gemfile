@@ -55,6 +55,7 @@ gem 'httparty'
 gem 'flowdock'
 
 gem 'non-stupid-digest-assets'
+gem 'capistrano-faster-assets'
 
 # Authentication
 # ---------------------------------------
@@ -74,18 +75,26 @@ group :development, :test do
 end
 
 group :development do
-  gem 'capistrano',         require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rails',   require: false
-  gem 'capistrano-rbenv',   require: false
-  gem 'capistrano3-unicorn', platforms: :ruby # unicornを使っている場合のみ
-  gem 'capistrano-faster-assets'
+  # gem 'capistrano',         require: false
+  # gem 'capistrano-bundler', require: false
+  # gem 'capistrano-rails',   require: false
+  # gem 'capistrano-rbenv',   require: false
+  # gem 'capistrano3-unicorn', platforms: :ruby # unicornを使っている場合のみ
 
   # better errors
   gem 'better_errors'
   gem 'binding_of_caller', platform: 'ruby'
   gem 'meta_request'
 end
+
+group :deployment do
+  gem 'capistrano', '~> 3.2.1', platforms: :ruby
+  gem 'capistrano-rails', platforms: :ruby
+  gem 'capistrano-rbenv', platforms: :ruby
+  gem 'capistrano-bundler', platforms: :ruby
+  gem 'capistrano3-unicorn', platforms: :ruby # unicornを使っている場合のみ
+end
+
 
 group :test do
   gem 'rspec', '~> 3.3'
