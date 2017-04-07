@@ -93,6 +93,7 @@ group :deployment do
   gem 'capistrano-rbenv', platforms: :ruby
   gem 'capistrano-bundler', platforms: :ruby
   gem 'capistrano3-unicorn', platforms: :ruby # unicornを使っている場合のみ
+  gem 'capistrano-git-copy', require: false
 end
 
 
