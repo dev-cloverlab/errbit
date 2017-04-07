@@ -44,8 +44,5 @@ require "capistrano3/unicorn"
 require "capistrano/git_copy"
 install_plugin Capistrano::GitCopy::SCM
 
-require "whenever/capistrano"
-SSHKit.config.command_map[:whenever] = "bundle exec whenever"
-
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
