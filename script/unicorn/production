@@ -1,13 +1,13 @@
 #!/bin/sh
 # chkconfig: 345 90 20
 # description: Rails application sample
-# processname: unicorn_errbit_leeap_production
+# processname: unicorn_errbit_cloverlab_production
 
 RAILS_ENV=production
-SERVICE=errbit_leeap_production
+SERVICE=errbit_cloverlab_production
 USER=clover
 
-RAILS_ROOT_DIR="/var/www/html/errbit.leeap.jp/current"
+RAILS_ROOT_DIR="/var/www/html/errbit.cloverlab.jp.net/current"
 
 PID=${RAILS_ROOT_DIR}/tmp/pids/unicorn.pid
 UNICORN_CONF=${RAILS_ROOT_DIR}/config/unicorn/${RAILS_ENV}.rb
