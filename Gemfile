@@ -88,7 +88,7 @@ group :development do
 end
 
 group :deployment do
-  gem 'capistrano', '~> 3.2.1', platforms: :ruby
+  gem 'capistrano', '~> 3.8.0', platforms: :ruby
   gem 'capistrano-rails', platforms: :ruby
   gem 'capistrano-rbenv', platforms: :ruby
   gem 'capistrano-bundler', platforms: :ruby
