@@ -6,6 +6,7 @@ require 'capistrano/rbenv'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/puma'
+install_plugin Capistrano::Puma
 
 require "capistrano/git_copy"
 install_plugin Capistrano::GitCopy::SCM
