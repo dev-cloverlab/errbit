@@ -220,4 +220,28 @@ describe App, type: 'model' do
       end.to raise_error(Mongoid::Errors::DocumentNotFound)
     end
   end
+
+  describe '#notice_fingerprinter' do
+    it 'app acquires a notice_fingerprinter when it doesn\'t have one' do
+      app = Fabricate(:app, name: 'Errbit')
+      app.notice_fingerprinter.delete
+
+      # has a notice_fingerprinter because it's been accessed when blank
+      expect(app.reload.notice_fingerprinter).to be_a(NoticeFingerprinter)
+    end
+
+    it 'brand new app has a notice_fingerprinter' do
+      app = Fabricate(:app, name: 'Errbit')
+      expect(app.notice_fingerprinter).to be_a(NoticeFingerprinter)
+    end
+  end
+
+  context "searching" do
+    it 'finds the correct record' do
+      found = Fabricate(:app, name: 'Foo')
+      not_found = Fabricate(:app, name: 'Brr')
+      expect(App.search("Foo").to_a).to include(found)
+      expect(App.search("Foo").to_a).to_not include(not_found)
+    end
+  end
 end

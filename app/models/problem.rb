@@ -55,12 +55,12 @@ class Problem
   validates :last_notice_at, :first_notice_at, presence: true
 
   before_create :cache_app_attributes
-  before_save :truncate_message
 
   scope :resolved, -> { where(resolved: true) }
   scope :unresolved, -> { where(resolved: false) }
   scope :ordered, -> { order_by(:last_notice_at.desc) }
   scope :for_apps, ->(apps) { where(:app_id.in => apps.all.map(&:id)) }
+  scope :search, ->(value) { where('$text' => { '$search' => value }) }
 
   def self.all_else_unresolved(fetch_all)
     if fetch_all
@@ -161,8 +161,9 @@ class Problem
     Rails.application.routes.url_helpers.app_problem_url(
       app,
       self,
-      host: Errbit::Config.host,
-      port: Errbit::Config.port
+      protocol: Errbit::Config.protocol,
+      host:     Errbit::Config.host,
+      port:     Errbit::Config.port
     )
   end
 
@@ -223,18 +224,10 @@ class Problem
     self.app_name = app.name if app
   end
 
-  def truncate_message
-    self.message = message[0, 1000] if message
-  end
-
   def issue_type
     # Return issue_type if configured, but fall back to detecting app's issue tracker
     attributes['issue_type'] ||=
     (app.issue_tracker_configured? && app.issue_tracker.type_tracker) || nil
-  end
-
-  def self.search(value)
-    Problem.where('$text' => { '$search' => value })
   end
 
 private

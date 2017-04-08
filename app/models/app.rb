@@ -24,12 +24,14 @@ class App
   embeds_many :watchers
   embeds_one :issue_tracker, class_name: 'IssueTracker'
   embeds_one :notification_service
-  embeds_one :notice_fingerprinter, autobuild: true
+  embeds_one :notice_fingerprinter
 
   has_many :problems, inverse_of: :app, dependent: :destroy
 
   before_validation :generate_api_key, on: :create
   before_save :normalize_github_repo
+  before_create :build_notice_fingerprinter
+  after_find :build_notice_fingerprinter
   after_update :store_cached_attributes_on_problems
 
   validates :name, :api_key, presence: true, uniqueness: { allow_blank: true }
@@ -48,9 +50,22 @@ class App
     reject_if:     proc { |attrs| !NotificationService.subclasses.map(&:to_s).include?(attrs[:type].to_s) }
   accepts_nested_attributes_for :notice_fingerprinter
 
+  index({
+          name: "text"
+        }, default_language: "english")
+
+  scope :search, ->(value) { where('$text' => { '$search' => value }) }
   scope :watched_by, lambda { |user|
     where watchers: { "$elemMatch" => { "user_id" => user.id } }
   }
+
+  def build_notice_fingerprinter
+    # no need to build a notice_fingerprinter if we already have one
+    return if notice_fingerprinter.present?
+
+    attrs = SiteConfig.document.notice_fingerprinter_attributes
+    self.notice_fingerprinter = attrs
+  end
 
   def watched_by?(user)
     watchers.pluck("user_id").include? user.id
@@ -176,6 +191,10 @@ class App
 
   def regenerate_api_key!
     update_attribute(:api_key, SecureRandom.hex)
+  end
+
+  def use_site_fingerprinter
+    notice_fingerprinter.source == 'site'
   end
 
 protected
